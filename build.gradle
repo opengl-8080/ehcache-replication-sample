@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'eu.appsatori:gradle-fatjar-plugin:0.3'
+    }
+}
+
+apply plugin: 'eu.appsatori.fatjar'
+apply plugin: 'eclipse'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'net.sf.ehcache:ehcache:2.10.0'
+}
+
+eclipse {
+    project.name = 'ehcache-replication-sample'
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+fatJar {
+    baseName = 'ehrep'
+    manifest {
+        attributes('Main-Class': 'sample.ehcache.Main')
+    }
+}

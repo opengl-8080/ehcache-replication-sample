@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd">
+      
+  <cacheManagerPeerProviderFactory
+      class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+      properties="peerDiscovery=manual,
+                  rmiUrls=//localhost:5002/myCache"
+      />
+  
+  <cacheManagerPeerListenerFactory
+      class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
+      properties="hostName=localhost, port=5001"
+      />
+  
+  <cache name="myCache"
+         maxEntriesLocalHeap="0">
+    <cacheEventListenerFactory
+        class="net.sf.ehcache.distribution.RMICacheReplicatorFactory" />
+  </cache>
+</ehcache>
