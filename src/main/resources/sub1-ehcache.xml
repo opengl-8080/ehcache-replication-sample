@@ -5,12 +5,12 @@
   <cacheManagerPeerProviderFactory
       class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
       properties="peerDiscovery=manual,
-                  rmiUrls=//localhost:5001/myCache"
+                  rmiUrls=//localhost:5000/myCache|//localhost:5002/myCache"
       />
   
   <cacheManagerPeerListenerFactory
       class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory"
-      properties="hostName=localhost, port=5002"
+      properties="hostName=localhost, port=5001"
       />
   
   <cache name="myCache"

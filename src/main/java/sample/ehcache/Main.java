@@ -10,7 +10,12 @@ public class Main {
 
     public static void main(String[] args) {
         boolean isMain = "main".equals(args[0]);
-        InputStream is = Main.class.getResourceAsStream(isMain ? "/main-ehcache.xml" : "/sub-ehcache.xml");
+        boolean isSub1 = "sub1".equals(args[0]);
+        String config = isMain ? "/main-ehcache.xml"
+                               : isSub1 ? "/sub1-ehcache.xml"
+                                        : "/sub2-ehcache.xml";
+        
+        InputStream is = Main.class.getResourceAsStream(config);
         
         CacheManager manager = CacheManager.create(is);
         
@@ -18,21 +23,21 @@ public class Main {
             Cache cache = manager.getCache("myCache");
             
             if (isMain) {
-                mainProcess(cache);
+                mainProcess(cache, args[1]);
             } else {
-                subProcess(cache);
+                subProcess(cache, isSub1 ? 1 : 2);
             }
         } finally {
             manager.shutdown();
         }
     }
     
-    private static void mainProcess(Cache cache) {
-        cache.put(new Element("msg", "Hello RMI Replication!!"));
-        System.out.println("[main] put msg into cache");
+    private static void mainProcess(Cache cache, String message) {
+        cache.put(new Element("msg", message));
+        System.out.println("[main] put msg(\"" + message + "\") into cache");
     }
     
-    private static void subProcess(Cache cache) {
+    private static void subProcess(Cache cache, int number) {
         Element e = cache.get("msg");
         
         while (e == null) {
@@ -40,7 +45,7 @@ public class Main {
             sleep(1000);
         }
         
-        System.out.println("[sub] msg : " + e.getObjectValue());
+        System.out.println("[sub" + number + "] msg : " + e.getObjectValue());
     }
 
     private static void sleep(long ms) {
